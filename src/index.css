@@ -1,0 +1,118 @@
+
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@layer base {
+  :root {
+    --background: 0 0% 100%; /* Blanco */
+    --foreground: 0 0% 0%; /* Negro */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+    --primary: 330 80% 55%; /* Rosa Principal */
+    --primary-foreground: 0 0% 100%; /* Blanco para texto sobre rosa */
+    --secondary: 0 0% 95%; /* Gris claro para acentos */
+    --secondary-foreground: 0 0% 0%;
+    --muted: 0 0% 95%;
+    --muted-foreground: 0 0% 40%;
+    --accent: 45 100% 50%; /* Amarillo para detalles */
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 85%;
+    --input: 0 0% 85%;
+    --ring: 330 80% 55%; /* Rosa para focus rings */
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 10%; /* Negro para modo oscuro */
+    --foreground: 0 0% 98%; /* Blanco para texto en modo oscuro */
+    --card: 0 0% 15%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 15%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 330 70% 60%; /* Rosa más brillante para modo oscuro */
+    --primary-foreground: 0 0% 0%; /* Negro para texto sobre rosa */
+    --secondary: 0 0% 20%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 45 90% 55%; /* Amarillo más brillante para modo oscuro */
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 30%;
+    --input: 0 0% 30%;
+    --ring: 330 70% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  .gradient-bg-custom {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+  }
+  
+  .gradient-text-custom {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .glass-effect-custom {
+    background: hsla(var(--background), 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid hsla(var(--border), 0.2);
+  }
+  
+  .neon-glow-custom {
+    box-shadow: 0 0 20px hsla(var(--primary), 0.5);
+  }
+  
+  .floating {
+    animation: floating 3s ease-in-out infinite;
+  }
+  
+  @keyframes floating {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  .pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+.admin-pattern {
+  background-image: 
+    radial-gradient(circle at 25% 25%, hsl(var(--primary)) 1px, transparent 1px),
+    radial-gradient(circle at 75% 75%, hsl(var(--accent)) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-color: hsl(var(--background));
+}
+
+.portfolio-card {
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+}
+
+.portfolio-card:hover {
+  transform: translateY(-10px) rotateX(5deg);
+}
+
+.pricing-table-custom {
+  background: linear-gradient(135deg, hsla(var(--primary), 0.1) 0%, hsla(var(--accent), 0.1) 100%);
+}
