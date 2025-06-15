@@ -15,19 +15,22 @@ function AdminPortfolio() {
     image: ''
   });
 
+  // Verifica si localStorage está disponible
+  const isLocalStorageAvailable = () => typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
+
   useEffect(() => {
-    loadProjects();
+    if (isLocalStorageAvailable()) {
+      const savedProjects = localStorage.getItem('portfolioProjects');
+      if (savedProjects) {
+        setProjects(JSON.parse(savedProjects));
+      }
+    }
   }, []);
 
-  const loadProjects = () => {
-    const savedProjects = localStorage.getItem('portfolioProjects');
-    if (savedProjects) {
-      setProjects(JSON.parse(savedProjects));
-    }
-  };
-
   const saveProjects = (updatedProjects) => {
-    localStorage.setItem('portfolioProjects', JSON.stringify(updatedProjects));
+    if (isLocalStorageAvailable()) {
+      localStorage.setItem('portfolioProjects', JSON.stringify(updatedProjects));
+    }
     setProjects(updatedProjects);
   };
 
@@ -41,7 +44,7 @@ function AdminPortfolio() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (editingProject) {
       const updatedProjects = projects.map(project =>
         project.id === editingProject.id

@@ -14,8 +14,8 @@ function Portfolio() {
       const defaultProjects = [
         {
           id: 1,
-          name: "Escuelas DonyDonitasss",
-          url: "escuelas.donydonitasss.com",
+          name: "Escuela DonyDonitasss",
+          url: "escuelita.donydonitasss.com",
           description: "Plataforma educativa moderna con gestión de cursos y estudiantes",
           image: "Educational platform with modern interface showing course management, pink and yellow theme"
         },
