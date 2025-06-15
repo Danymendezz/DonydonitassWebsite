@@ -17,21 +17,21 @@ function Portfolio() {
           name: "Escuela DonyDonitasss",
           url: "escuelita.donydonitasss.com",
           description: "Plataforma educativa moderna con gestión de cursos y estudiantes",
-          image: "Educational platform with modern interface showing course management, pink and yellow theme"
+          image: "https://tu-servidor.com/imagenes/escuela.jpg"
         },
         {
           id: 2,
           name: "Invitaciones Digitales",
           url: "invitaciones.donydonitasss.com",
           description: "Sistema de invitaciones digitales personalizables para eventos especiales",
-          image: "Digital invitation platform with elegant design templates, pink and yellow theme"
+          image: "https://tu-servidor.com/imagenes/invitaciones.jpg"
         },
         {
           id: 3,
           name: "Mobiliaria Premium",
           url: "mobiliaria.donydonitasss.com",
           description: "Catálogo online de muebles con experiencia de compra inmersiva",
-          image: "Furniture e-commerce website with premium product showcase, pink and yellow theme"
+          image: "https://tu-servidor.com/imagenes/mobiliaria.jpg"
         }
       ];
       setProjects(defaultProjects);
@@ -75,10 +75,11 @@ function Portfolio() {
               className="portfolio-card bg-card rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl"
             >
               <div className="relative overflow-hidden">
-                <img   
+                <img
                   className="w-full h-48 object-cover"
-                  alt={`Preview del proyecto ${project.name} con tema rosa y amarillo`}
-                  src="https://images.unsplash.com/photo-1572177812156-58036aae439c" />
+                  alt={`Preview del proyecto ${project.name}`}
+                  src={project.image}
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                   <Button
                     onClick={() => handleVisitSite(project.url)}
@@ -89,7 +90,7 @@ function Portfolio() {
                   </Button>
                 </div>
               </div>
-              
+
               <div className="p-6">
                 <h3 className="text-xl font-bold text-foreground mb-2">{project.name}</h3>
                 <p className="text-muted-foreground mb-4 text-sm">{project.description}</p>

@@ -98,7 +98,7 @@ function Services() {
       price: pricing.interactiveFormSite || 6800,
       description: "Perfecto para captar clientes o solicitudes.",
       features: [
-        "Todo lo del sitio informativo",
+        "Incluye todas las funcionalidades del sitio informativo básico",
         "Formulario personalizado (contacto, cotización, etc.)",
         "Integración con redes sociales",
         "Imágenes optimizadas",
@@ -112,7 +112,7 @@ function Services() {
       price: pricing.customBrandingSite || 8400,
       description: "Tu marca desde cero, bien presentada.",
       features: [
-        "Todo lo del sitio con formulario",
+        "Incluye todas las funcionalidades del sitio con Formulario Básico",
         "Diseño de logo",
         "Paleta de colores personalizada",
         "Tipografía y manual de uso básico",
@@ -138,10 +138,10 @@ function Services() {
     },
     {
       name: "Sitio Corporativo con Correos",
-      price: pricing.corporateSite || 13000,
+      price: pricing.corporateSite || 14500,
       description: "Para empresas, escuelas o equipos grandes.",
       features: [
-        "Todo lo del e-commerce o branding",
+        "Incluye todas las funcionalidades del sitio e-commerce o branding",
         "Correos institucionales configurados (hasta 10 cuentas)",
         "Asesoría personalizada",
         "Diseño profesional adaptado a tu rubro",
