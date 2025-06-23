@@ -12,8 +12,12 @@ function Contact() {
     service: '',
     message: ''
   });
+  const [isLoading, setIsLoading] = useState(false); // Nuevo estado para la carga
   const myPhoneNumber = "5215539500411";
   const myEmail = "danymm2407@gmail.com";
+
+  // URL de la API (ajusta si es necesario)
+  const API_URL = import.meta.env.VITE_API_URL || 'https://donydonitasss.com/api';
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -23,18 +27,69 @@ function Contact() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => { // Marca la función como async
     e.preventDefault();
-    const subject = `Solicitud de cotización: ${formData.service || 'Consulta General'}`;
-    const body = `Nombre: ${formData.name}\nEmail: ${formData.email}\nTeléfono: ${formData.phone || 'No proporcionado'}\nServicio de Interés: ${formData.service || 'No especificado'}\n\nMensaje:\n${formData.message}`;
-    const mailtoLink = `mailto:${myEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    
-    window.location.href = mailtoLink;
+    setIsLoading(true); // Inicia el estado de carga
 
-    toast({
-      title: "Redirigiendo a tu cliente de correo...",
-      description: "Preparamos un correo para que nos envíes tu solicitud.",
-    });
+    try {
+      // 1. Envía los datos a tu base de datos
+      const dbResponse = await fetch(`${API_URL}/saveContact.php`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json' // Para indicar que esperamos JSON de vuelta
+        },
+        body: JSON.stringify(formData) // Envía el estado del formulario como JSON
+      });
+
+      // Verifica si la respuesta de la base de datos fue exitosa
+      const dbResult = await dbResponse.json();
+
+      if (!dbResponse.ok || !dbResult.success) {
+        // Lanza un error si la API responde con un error o success: false
+        throw new Error(dbResult.error || 'Error al guardar el mensaje en la base de datos.');
+      }
+
+      // Si todo fue bien en la DB:
+      toast({
+        title: "¡Mensaje enviado!",
+        description: "Tu solicitud ha sido recibida y guardada. Nos pondremos en contacto pronto.",
+      });
+
+      // Opcional: Limpiar el formulario después del envío exitoso
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        service: '',
+        message: ''
+      });
+
+      // 2. Procede con la redirección a mailto: (o podrías eliminar esto si solo quieres guardar en DB)
+      // La redirección `window.location.href` es un poco agresiva y puede interrumpir la experiencia.
+      // Considera si realmente quieres abrir el cliente de correo del usuario automáticamente.
+      // Si el objetivo principal es guardar en DB, este paso es opcional.
+      /*
+      const subject = `Solicitud de cotización: ${formData.service || 'Consulta General'}`;
+      const body = `Nombre: ${formData.name}\nEmail: ${formData.email}\nTeléfono: ${formData.phone || 'No proporcionado'}\nServicio de Interés: ${formData.service || 'No especificado'}\n\nMensaje:\n${formData.message}`;
+      const mailtoLink = `mailto:${myEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = mailtoLink;
+      toast({
+        title: "Redirigiendo a tu cliente de correo...",
+        description: "Preparamos un correo para que nos envíes tu solicitud.",
+      });
+      */
+
+    } catch (error) {
+      console.error("Error al enviar mensaje:", error);
+      toast({
+        variant: "destructive",
+        title: "Error al enviar el mensaje",
+        description: error.message || "Hubo un problema al procesar tu solicitud. Intenta de nuevo.",
+      });
+    } finally {
+      setIsLoading(false); // Finaliza el estado de carga
+    }
   };
 
   const services = [
@@ -91,7 +146,7 @@ function Contact() {
                     <a href={`mailto:${myEmail}`} className="text-muted-foreground hover:text-primary">{myEmail}</a>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 bg-accent rounded-lg flex items-center justify-center">
                     <Phone className="w-6 h-6 text-accent-foreground" />
@@ -103,7 +158,7 @@ function Contact() {
                     </a>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 bg-primary/80 rounded-lg flex items-center justify-center">
                     <MapPin className="w-6 h-6 text-primary-foreground" />
@@ -148,7 +203,7 @@ function Contact() {
             <h3 className="text-2xl font-bold text-foreground mb-6">
               Envíanos un Mensaje
             </h3>
-            
+
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -163,9 +218,10 @@ function Contact() {
                     className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-background text-foreground"
                     placeholder="Tu nombre"
                     required
+                    disabled={isLoading} // Deshabilita el input mientras carga
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
                     Email
@@ -178,6 +234,7 @@ function Contact() {
                     className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-background text-foreground"
                     placeholder="tu@email.com"
                     required
+                    disabled={isLoading} // Deshabilita el input mientras carga
                   />
                 </div>
               </div>
@@ -194,9 +251,10 @@ function Contact() {
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-background text-foreground"
                     placeholder="+52 55 1234 5678"
+                    disabled={isLoading} // Deshabilita el input mientras carga
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
                     Servicio de Interés
@@ -207,6 +265,7 @@ function Contact() {
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-background text-foreground"
                     required
+                    disabled={isLoading} // Deshabilita el input mientras carga
                   >
                     <option value="">Selecciona un servicio</option>
                     {services.map((service, index) => (
@@ -228,15 +287,29 @@ function Contact() {
                   className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-background text-foreground"
                   placeholder="Describe tu proyecto, objetivos y cualquier detalle importante..."
                   required
+                  disabled={isLoading} // Deshabilita el input mientras carga
                 ></textarea>
               </div>
 
               <Button
                 type="submit"
                 className="w-full bg-primary text-primary-foreground hover:bg-primary/90 py-3 text-lg"
+                disabled={isLoading} // Deshabilita el botón mientras carga
               >
-                <Send className="w-5 h-5 mr-2" />
-                Enviar Mensaje por Email
+                {isLoading ? (
+                  <span className="flex items-center">
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Enviando...
+                  </span>
+                ) : (
+                  <>
+                    <Send className="w-5 h-5 mr-2" />
+                    Enviar Mensaje
+                  </>
+                )}
               </Button>
               <Button
                 type="button"
@@ -247,6 +320,7 @@ function Contact() {
                 }}
                 variant="outline"
                 className="w-full border-green-500 text-green-600 hover:bg-green-500/10 py-3 text-lg"
+                disabled={isLoading} // Deshabilita el botón mientras carga
               >
                 <MessageSquare className="w-5 h-5 mr-2" />
                 Contactar por WhatsApp
